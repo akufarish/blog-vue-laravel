@@ -88,4 +88,29 @@ class AuthController extends Controller
             ], 401);
         }
     }
+
+    public function doLogout(Request $request)
+    {
+        $token = $request->input("token");
+
+        $user = User::where("token", $token)->first();
+
+
+        if(!$user) {
+            return response()->json([
+                "status" => 401,
+                "message" => "token invalid"
+            ], 401);
+        } else { 
+            $user->update([
+                "token" => ""
+            ]);
+
+            return response()->json([
+                "status" =>  200,
+                "message" => "berhasil logout"
+            ], 200);
+        }
+
+    }
 }
